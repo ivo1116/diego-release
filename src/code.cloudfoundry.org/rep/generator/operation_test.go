@@ -421,6 +421,23 @@ var _ = Describe("Operation", func() {
 					})
 				})
 
+				Context("when the container has an internal IP", func() {
+					BeforeEach(func() {
+						container = executor.Container{
+							InternalIP: "10.153.148.11",
+							Tags: executor.Tags{
+								rep.LifecycleTag: rep.LRPLifecycle,
+							},
+						}
+						containerDelegate.GetContainerReturns(container, true)
+					})
+
+					It("logs the container's instance address for query attribution", func() {
+						Expect(logger).To(Say("container-network-info"))
+						Expect(logger).To(Say("10.153.148.11"))
+					})
+				})
+
 				Context("when the container has a Task lifecycle tag", func() {
 					BeforeEach(func() {
 						container = executor.Container{

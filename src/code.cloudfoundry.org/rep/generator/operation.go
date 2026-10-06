@@ -266,6 +266,12 @@ func (o *ContainerOperation) Execute() {
 		"container-state": container.State,
 	})
 
+	if container.InternalIP != "" {
+		logger.Info("container-network-info", lager.Data{
+			"instance-address": container.InternalIP,
+		})
+	}
+
 	lifecycle := container.Tags[rep.LifecycleTag]
 
 	switch lifecycle {
