@@ -114,6 +114,7 @@ type RepConfig struct {
 	DiskHealthCheckInterval         durationjson.Duration `json:"disk_health_check_interval,omitempty"`
 	DiskHealthCheckFailureThreshold int                   `json:"disk_health_check_failure_threshold,omitempty"`
 	LoggregatorConfig               loggingclient.Config  `json:"loggregator"`
+	LogContainerNetworkInfo         bool                  `json:"log_container_network_info,omitempty"`
 	debugserver.DebugServerConfig
 	executorinit.ExecutorConfig
 	lagerflags.LagerConfig
