@@ -219,12 +219,13 @@ func (o *ResidualTaskOperation) Execute() {
 // ContainerOperation acquires the current state of a container and performs any
 // bbs or container operations necessary to harmonize the state of the world.
 type ContainerOperation struct {
-	logger            lager.Logger
-	traceID           string
-	lrpProcessor      internal.LRPProcessor
-	taskProcessor     internal.TaskProcessor
-	containerDelegate internal.ContainerDelegate
-	Guid              string
+	logger                  lager.Logger
+	traceID                 string
+	lrpProcessor            internal.LRPProcessor
+	taskProcessor           internal.TaskProcessor
+	containerDelegate       internal.ContainerDelegate
+	Guid                    string
+	logContainerNetworkInfo bool
 }
 
 func NewContainerOperation(
@@ -234,14 +235,16 @@ func NewContainerOperation(
 	taskProcessor internal.TaskProcessor,
 	containerDelegate internal.ContainerDelegate,
 	guid string,
+	logContainerNetworkInfo bool,
 ) *ContainerOperation {
 	return &ContainerOperation{
-		logger:            logger,
-		traceID:           traceID,
-		lrpProcessor:      lrpProcessor,
-		taskProcessor:     taskProcessor,
-		containerDelegate: containerDelegate,
-		Guid:              guid,
+		logger:                  logger,
+		traceID:                 traceID,
+		lrpProcessor:            lrpProcessor,
+		taskProcessor:           taskProcessor,
+		containerDelegate:       containerDelegate,
+		Guid:                    guid,
+		logContainerNetworkInfo: logContainerNetworkInfo,
 	}
 }
 
@@ -266,7 +269,7 @@ func (o *ContainerOperation) Execute() {
 		"container-state": container.State,
 	})
 
-	if container.InternalIP != "" {
+	if o.logContainerNetworkInfo && container.InternalIP != "" {
 		logger.Info("container-network-info", lager.Data{
 			"instance-address": container.InternalIP,
 		})
